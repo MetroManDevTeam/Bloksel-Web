@@ -23,8 +23,9 @@ title: "Bloksel Staff"
 <p style="margin: 8px 0; font-weight: bold;">Brownie</p>
 </div>
 
-<div style="text-align: center; margin-top: 30px;">
-<p style="font-size: 1.2em; font-weight: bold; color: #1976d2;">bloksel.com</p>
+<div style="background: #ffffff; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; border-left: 4px solid #9c27b0;">
+<h2 style="margin-top: 0; color: #9c27b0;">Sound Design</h2>
+<p style="margin: 8px 0; font-weight: bold;">EzechielSound</p>
 </div>
 
 </div> 
