@@ -280,5 +280,596 @@
       });
     });
   </script>
+
+  <!-- Floating Avatar Button with Full Subdomain and Language Support -->
+<div class="floating-avatar">
+  <div class="avatar-dropdown" id="avatarDropdown">
+    <div id="loggedInMenu">
+      <a href="/account" class="dropdown-item account-link">
+        <i class="fas fa-user-cog"></i> <span class="i18n" data-en="Account" data-es="Cuenta"></span>
+        <div class="loading-spinner" style="display: none;"></div>
+      </a>
+      <a href="/profile" class="dropdown-item">
+        <i class="fas fa-user"></i> <span class="i18n" data-en="Profile" data-es="Perfil"></span>
+      </a>
+      <a href="/notifications" class="dropdown-item">
+        <i class="fas fa-bell"></i> <span class="i18n" data-en="Notifications" data-es="Notificaciones"></span>
+        <span class="notification-badge" id="notificationBadge">0</span>
+      </a>
+      <a href="#" class="dropdown-item" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> <span class="i18n" data-en="Logout" data-es="Cerrar sesión"></span>
+      </a>
+    </div>
+    <div id="loggedOutMenu" style="display: none;">
+      <a href="/login" class="dropdown-item">
+        <i class="fas fa-sign-in-alt"></i> <span class="i18n" data-en="Login" data-es="Iniciar sesión"></span>
+      </a>
+      <a href="/signup" class="dropdown-item">
+        <i class="fas fa-user-plus"></i> <span class="i18n" data-en="Sign Up" data-es="Registrarse"></span>
+      </a>
+    </div>
+  </div>
+  <button class="avatar-btn" id="avatarBtn">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTEyLDJBMTAsMTAgMCAwLDAgMiwxMkExMCwxMCAwIDAsMCAxMiwyMkExMCwxMCAwIDAsMCAyMiwxMkExMCwxMCAwIDAsMCAxMiwyTTEyLDRBOCw4IDAgMCwxIDIwLDEyQTgsOCAwIDAsMSAxMiwyMEE4LDggMCAwLDEgNCwxMkE4LDggMCAwLDEgMTIsNE0xMiw2QTEsMSAwIDAsMCAxMSw3QTEsMSAwIDAsMCAxMiw4QTEsMSAwIDAsMCAxMyw3QTEsMSAwIDAsMCAxMiw2TTEyLDlBMiwyIDAgMCwwIDEwLDExQTIsMiAwIDAsMCAxMiwxM0EyLDIgMCAwLDAgMTQsMTFBMiwyIDAwLDAwIDEyLDlaIiAvPjwvc3ZnPg==" alt="User" class="avatar-img" id="userAvatar">
+    <div class="avatar-loading" id="avatarLoading" style="display: none;"></div>
+  </button>
+</div>
+
+<style>
+  .floating-avatar {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+  }
+  .avatar-btn {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background-color: #3498db;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  .avatar-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .avatar-dropdown {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 200px;
+    overflow: hidden;
+    display: none;
+  }
+  .avatar-dropdown.active {
+    display: block;
+    animation: fadeIn 0.2s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .dropdown-item {
+    position: relative;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .dropdown-item:hover {
+    background: #f5f5f5;
+  }
+  .dropdown-item i {
+    width: 20px;
+    text-align: center;
+  }
+  .notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    display: none;
+  }
+  .loading-spinner {
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 2px solid #3498db;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    margin-left: auto;
+  }
+  .avatar-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .avatar-loading::after {
+    content: "";
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 3px solid white;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<script type="module">
+  import { initializeApp, getApps, deleteApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { 
+    getAuth, 
+    onAuthStateChanged, 
+    signOut,
+    setPersistence,
+    browserSessionPersistence,
+    signInWithCustomToken,
+    getIdToken
+  } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+  class FloatingAuth {
+    constructor() {
+      this.auth = null;
+      this.db = null;
+      this.currentLanguage = 'en'; // Default language
+      this.app = null;
+      this.initialized = false;
+      this.isUsersSubdomain = window.location.hostname === 'users.bloksel.com';
+      this.init();
+    }
+
+    async init() {
+      try {
+        // First initialize language and UI
+        this.detectLanguage();
+        this.updateUILanguage();
+        this.setupUI();
+
+        // Then initialize Firebase
+        await this.initializeFirebase();
+        
+        // Set up auth state listener
+        this.setupAuthListener();
+        
+        // Try to sync session
+        await this.syncCrossDomainSession();
+        
+        this.initialized = true;
+      } catch (error) {
+        console.error('Initialization error:', error);
+        this.showLoading(false);
+        this.showLoggedOutState();
+      }
+    }
+
+    async initializeFirebase() {
+      try {
+        this.showLoading(true);
+        
+        // Clean up any existing Firebase instances
+        const existingApps = getApps();
+        if (existingApps.length > 0) {
+          await Promise.all(existingApps.map(app => deleteApp(app)));
+        }
+
+        // Fetch config and initialize
+        const firebaseConfig = await this.fetchFirebaseConfig();
+        this.app = initializeApp(firebaseConfig);
+        this.auth = getAuth(this.app);
+        await setPersistence(this.auth, browserSessionPersistence);
+        this.db = getFirestore(this.app);
+      } catch (error) {
+        console.error('Firebase initialization failed:', error);
+        throw error;
+      } finally {
+        this.showLoading(false);
+      }
+    }
+
+    detectLanguage() {
+      // 1. Check URL path
+      const path = window.location.pathname;
+      if (path.startsWith('/es') || path.startsWith('/es/')) {
+        this.currentLanguage = 'es';
+      } else if (path.startsWith('/en') || path.startsWith('/en/')) {
+        this.currentLanguage = 'en';
+      }
+      // 2. Check query parameter
+      else if (window.location.search.includes('lang=es')) {
+        this.currentLanguage = 'es';
+      } else if (window.location.search.includes('lang=en')) {
+        this.currentLanguage = 'en';
+      }
+      // 3. Check localStorage
+      else if (localStorage.getItem('preferredLanguage')) {
+        this.currentLanguage = localStorage.getItem('preferredLanguage');
+      }
+      // 4. Check browser language
+      else if (navigator.language.startsWith('es')) {
+        this.currentLanguage = 'es';
+      }
+      // Default is 'en'
+    }
+
+    updateUILanguage() {
+      const elements = document.querySelectorAll('.i18n');
+      elements.forEach(el => {
+        el.textContent = el.getAttribute(`data-${this.currentLanguage}`) || el.getAttribute('data-en');
+      });
+      
+      // Update all links with proper language prefixes
+      this.updateLinksWithLanguage();
+    }
+
+    updateLinksWithLanguage() {
+      const links = document.querySelectorAll('.dropdown-item[href^="/"]');
+      links.forEach(link => {
+        const originalPath = link.getAttribute('href');
+        
+        // Skip if already has language prefix and is on users subdomain
+        if (this.isUsersSubdomain && originalPath.startsWith(`/${this.currentLanguage}/`)) {
+          return;
+        }
+        
+        // Remove any existing language prefix
+        let cleanPath = originalPath;
+        if (originalPath.startsWith('/en/') || originalPath.startsWith('/es/')) {
+          cleanPath = originalPath.substring(3);
+        } else if (originalPath === '/en' || originalPath === '/es') {
+          cleanPath = '/';
+        }
+        
+        // For all auth-related links, use users subdomain with language prefix
+        const authPaths = ['/account', '/profile', '/notifications', '/login', '/signup'];
+        if (authPaths.some(path => cleanPath.startsWith(path))) {
+          const newPath = `/${this.currentLanguage}${cleanPath}`;
+          link.setAttribute('href', this.getFullUsersUrl(newPath));
+        } 
+        // For other links on users subdomain, keep the subdomain
+        else if (this.isUsersSubdomain) {
+          const newPath = `/${this.currentLanguage}${cleanPath}`;
+          link.setAttribute('href', newPath);
+        }
+        // For main domain, add language prefix
+        else {
+          link.setAttribute('href', `/${this.currentLanguage}${cleanPath}`);
+        }
+      });
+    }
+
+    getFullUsersUrl(path) {
+      // Ensure path starts with a slash
+      let normalizedPath = path.startsWith('/') ? path : `/${path}`;
+      
+      // Ensure path has language prefix
+      if (!normalizedPath.startsWith(`/${this.currentLanguage}`)) {
+        normalizedPath = `/${this.currentLanguage}${normalizedPath}`;
+      }
+      
+      return `https://users.bloksel.com${normalizedPath}`;
+    }
+
+    async fetchFirebaseConfig() {
+      const response = await fetch('https://api.bloksel.com/api/firebase-config', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch Firebase config: ${response.status}`);
+      }
+      
+      const { data } = await response.json();
+      return {
+        ...data,
+        authDomain: 'bloksel.com',
+        storageBucket: 'bloksel.com'
+      };
+    }
+
+    async syncCrossDomainSession() {
+      try {
+        if (!this.auth) return null;
+
+        // If already authenticated, just refresh token
+        if (this.auth.currentUser) {
+          const token = await this.auth.currentUser.getIdToken(true);
+          this.setCrossDomainCookie('authToken', token, 3600);
+          return token;
+        }
+        
+        // Try to sync session from backend
+        const response = await fetch('https://api.bloksel.com/api/sync-session', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          if (response.status === 401) {
+            this.clearCrossDomainCookie('authToken');
+          }
+          throw new Error(`Session sync failed: ${response.status}`);
+        }
+        
+        const { data } = await response.json();
+        if (data?.token) {
+          this.setCrossDomainCookie('authToken', data.token, data.expiresIn || 3600);
+          await signInWithCustomToken(this.auth, data.token);
+          return data.token;
+        }
+      } catch (error) {
+        console.warn('Session sync error:', error);
+        return null;
+      }
+    }
+
+    setCrossDomainCookie(name, value, maxAge) {
+      const domains = ['bloksel.com', '.bloksel.com', window.location.hostname];
+      
+      domains.forEach(domain => {
+        try {
+          document.cookie = `${name}=${value}; path=/; domain=${domain}; Secure; SameSite=None; Max-Age=${maxAge}`;
+        } catch (e) {
+          console.warn(`Failed to set cookie for domain ${domain}:`, e);
+        }
+      });
+    }
+
+    clearCrossDomainCookie(name) {
+      const domains = ['bloksel.com', '.bloksel.com', window.location.hostname];
+      const pastDate = 'Thu, 01 Jan 1970 00:00:01 GMT';
+      
+      domains.forEach(domain => {
+        try {
+          document.cookie = `${name}=; path=/; domain=${domain}; Secure; SameSite=None; Expires=${pastDate}`;
+        } catch (e) {
+          console.warn(`Failed to clear cookie for domain ${domain}:`, e);
+        }
+      });
+    }
+
+    showLoading(show) {
+      const loadingElement = document.getElementById('avatarLoading');
+      if (loadingElement) {
+        loadingElement.style.display = show ? 'flex' : 'none';
+      }
+    }
+
+    setupAuthListener() {
+      if (!this.auth) return;
+
+      onAuthStateChanged(this.auth, async (user) => {
+        if (user) {
+          // User is logged in
+          const token = await user.getIdToken(true);
+          this.setCrossDomainCookie('authToken', token, 3600);
+          
+          // Show loading for account data
+          this.showAccountLoading(true);
+          await this.loadUserData(user.uid);
+          this.showAccountLoading(false);
+          
+          this.showLoggedInState(user);
+        } else {
+          // User is logged out
+          this.clearCrossDomainCookie('authToken');
+          this.showLoggedOutState();
+        }
+        this.showLoading(false);
+      });
+    }
+
+    showAccountLoading(show) {
+      const accountLink = document.querySelector('.account-link .loading-spinner');
+      if (accountLink) {
+        accountLink.style.display = show ? 'block' : 'none';
+      }
+    }
+
+    async loadUserData(uid) {
+      if (!this.initialized) return;
+
+      try {
+        let notificationCount = 0;
+        this.showAccountLoading(true);
+
+        // Try Firestore first
+        try {
+          const userDoc = await getDoc(doc(this.db, 'users', uid));
+          if (userDoc.exists()) {
+            notificationCount = userDoc.data().notificationCount || 0;
+          }
+        } catch (firestoreError) {
+          console.warn('Firestore access failed:', firestoreError);
+        }
+
+        // Try API as fallback
+        try {
+          const token = await this.auth.currentUser.getIdToken();
+          const accountRes = await fetch('https://api.bloksel.com/api/account', {
+            headers: { 'Authorization': `Bearer ${token}` },
+            credentials: 'include'
+          });
+          
+          if (accountRes.ok) {
+            const { data } = await accountRes.json();
+            notificationCount = data?.notifications?.count || notificationCount;
+          } else if (accountRes.status === 401) {
+            await this.handleLogout();
+            return;
+          }
+        } catch (apiError) {
+          console.warn('API access failed:', apiError);
+        }
+
+        this.updateNotificationCount(notificationCount);
+      } catch (error) {
+        console.error('User data load failed:', error);
+      } finally {
+        this.showAccountLoading(false);
+      }
+    }
+
+    updateNotificationCount(count) {
+      const badge = document.getElementById('notificationBadge');
+      if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+      }
+    }
+
+    showLoggedInState(user) {
+      const avatarImg = document.getElementById('userAvatar');
+      const loggedInMenu = document.getElementById('loggedInMenu');
+      const loggedOutMenu = document.getElementById('loggedOutMenu');
+      
+      if (avatarImg) {
+        // Update avatar image
+        avatarImg.src = user.photoURL || 
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email.split('@')[0])}&background=3498db&color=fff&rounded=true&size=128`;
+      }
+      
+      // Switch menu states
+      if (loggedInMenu) loggedInMenu.style.display = 'block';
+      if (loggedOutMenu) loggedOutMenu.style.display = 'none';
+    }
+
+    showLoggedOutState() {
+      const avatarImg = document.getElementById('userAvatar');
+      const loggedInMenu = document.getElementById('loggedInMenu');
+      const loggedOutMenu = document.getElementById('loggedOutMenu');
+      const notificationBadge = document.getElementById('notificationBadge');
+      
+      // Reset to default avatar
+      if (avatarImg) {
+        avatarImg.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTEyLDJBMTAsMTAgMCAwLDAgMiwxMkExMCwxMCAwIDAsMCAxMiwyMkExMCwxMCAwIDAsMCAyMiwxMkExMCwxMCAwIDAsMCAxMiwyTTEyLDRBOCw4IDAgMCwxIDIwLDEyQTgsOCAwIDAsMSAxMiwyMEE4LDggMCAwLDEgNCwxMkE4LDggMCAwLDEgMTIsNE0xMiw2QTEsMSAwIDAsMCAxMSw3QTEsMSAwIDAsMCAxMiw4QTEsMSAwIDAsMCAxMyw3QTEsMSAwIDAsMCAxMiw2TTEyLDlBMiwyIDAgMCwwIDEwLDExQTIsMiAwIDAsMCAxMiwxM0EyLDIgMCAwLDAgMTQsMTFBMiwyIDAwLDAwIDEyLDlaIiAvPjwvc3ZnPg==';
+      }
+      
+      // Hide notifications
+      if (notificationBadge) notificationBadge.style.display = 'none';
+      
+      // Switch menu states
+      if (loggedInMenu) loggedInMenu.style.display = 'none';
+      if (loggedOutMenu) loggedOutMenu.style.display = 'block';
+    }
+
+    async handleLogout() {
+      try {
+        // Show loading
+        this.showLoading(true);
+        
+        // 1. Clear Firebase auth
+        if (this.auth) {
+          await signOut(this.auth);
+        }
+        
+        // 2. Clear cross-domain cookie
+        this.clearCrossDomainCookie('authToken');
+        
+        // 3. Call backend logout
+        await fetch(`https://api.bloksel.com/api/logout`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+        
+        // 4. Redirect to login page with proper language prefix
+        const loginPath = `/${this.currentLanguage}/login`;
+        const loginUrl = this.getFullUsersUrl(loginPath);
+          
+        window.location.href = loginUrl;
+        
+      } catch (error) {
+        console.error('Logout failed:', error);
+        alert(this.currentLanguage === 'es' ? 'Error al cerrar sesión. Por favor, inténtalo de nuevo.' : 'Logout failed. Please try again.');
+      } finally {
+        this.showLoading(false);
+      }
+    }
+
+    setupUI() {
+      const avatarBtn = document.getElementById('avatarBtn');
+      const avatarDropdown = document.getElementById('avatarDropdown');
+      const logoutBtn = document.getElementById('logoutBtn');
+      
+      if (!avatarBtn || !avatarDropdown || !logoutBtn) return;
+      
+      // Toggle dropdown
+      avatarBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        avatarDropdown.classList.toggle('active');
+      });
+      
+      // Close when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!avatarDropdown.contains(e.target) && e.target !== avatarBtn) {
+          avatarDropdown.classList.remove('active');
+        }
+      });
+      
+      // Logout handler
+      logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await this.handleLogout();
+      });
+
+      // Update all links with proper language prefixes
+      this.updateLinksWithLanguage();
+    }
+  }
+
+  // Initialize with comprehensive error handling
+  document.addEventListener('DOMContentLoaded', () => {
+    try {
+      new FloatingAuth();
+    } catch (e) {
+      console.error('Critical initialization error:', e);
+      // Ensure UI is in logged out state
+      const loggedInMenu = document.getElementById('loggedInMenu');
+      const loggedOutMenu = document.getElementById('loggedOutMenu');
+      if (loggedInMenu && loggedOutMenu) {
+        loggedInMenu.style.display = 'none';
+        loggedOutMenu.style.display = 'block';
+      }
+    }
+  });
+</script>
 </body>
 </html>
