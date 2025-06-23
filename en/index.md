@@ -1,7 +1,6 @@
-
 ---
 layout: default
-title: Bloksel Project
+title: "Bloksel Project"
 ---
 
 <div style="max-width: 800px; margin: 0 auto 2em; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e1e4e8;">
