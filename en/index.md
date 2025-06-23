@@ -1,10 +1,12 @@
+
 ---
 layout: default
 title: Bloksel Project
 ---
 
-![InShot_20250515_082749270](https://github.com/user-attachments/assets/3c27862a-607a-42fd-8d9a-198cc368a9ba)
-
+<div style="max-width: 800px; margin: 0 auto 2em; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e1e4e8;">
+    <img src="https://github.com/user-attachments/assets/3c27862a-607a-42fd-8d9a-198cc368a9ba" alt="Bloksel Project Screenshot" style="width: 100%; height: auto; display: block;">
+</div>
 
 # 🌆 The City Based Voxel Game 
 
