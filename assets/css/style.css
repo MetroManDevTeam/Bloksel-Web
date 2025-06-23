@@ -17,13 +17,13 @@ h1 {
 }
 
 a {
-    color: #d00;
+    color: #0066cc; /* Changed from #d00 (dark red) to medium blue */
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 a:hover {
-    color: #a00;
+    color: #004499; /* Changed from #a00 (darker red) to darker blue */
     text-decoration: underline;
 }
 
@@ -33,7 +33,7 @@ p {
 
 /* ===== TOP NAVIGATION BAR ===== */
 .top-bar {
-    background-color: #d32f2f;
+    background-color: #1976d2; /* Changed from #d32f2f (red) to material blue */
     color: white;
     padding: 0.5rem 1rem;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -201,10 +201,10 @@ p {
     border-radius: 12px;
     background: linear-gradient(
         to left,
-        hsl(340deg 100% 16%) 0%,
-        hsl(340deg 100% 32%) 8%,
-        hsl(340deg 100% 32%) 92%,
-        hsl(340deg 100% 16%) 100%
+        hsl(220deg 100% 16%) 0%, /* Changed from red to blue */
+        hsl(220deg 100% 32%) 8%,
+        hsl(220deg 100% 32%) 92%,
+        hsl(220deg 100% 16%) 100%
     );
 }
 
@@ -215,7 +215,7 @@ p {
     border-radius: 12px;
     font-size: 1.1rem;
     color: white;
-    background: hsl(345deg 100% 47%);
+    background: hsl(215deg 100% 47%); /* Changed from red to blue */
     will-change: transform;
     transform: translateY(-4px);
     transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
@@ -285,7 +285,7 @@ p {
 
 .image-collage img:hover {
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    border-color: #d32f2f;
+    border-color: #1976d2; /* Changed from #d32f2f (red) to match nav blue */
 }
 
 /* ===== PROFILE STYLES ===== */
@@ -361,7 +361,7 @@ p {
         top: 100%;
         left: 0;
         right: 0;
-        background-color: #d32f2f;
+        background-color: #1976d2; /* Changed to match nav blue */
         padding: 1rem;
         gap: 0;
     }
@@ -419,7 +419,6 @@ p {
     .nav-logo {
         height: 20px;
     }
-
 }
 
 /* Social Media Footer */
@@ -460,4 +459,4 @@ p {
   width: 30px;
   height: 30px;
   object-fit: contain;
-  }
+}
